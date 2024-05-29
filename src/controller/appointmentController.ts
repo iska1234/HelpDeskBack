@@ -3,6 +3,7 @@ import { ApiError } from "../middlewares/error";
 import { getAppointmentsByUserService, insertAppointmentService } from "../services/appointmentService";
 import { appointmentSchema } from "../models/appointments";
 import z from "zod";
+import { getAppointmentDetails } from "../data/appointments-data";
 
 export const insertAppointmentController = async (
   req: Request,
@@ -91,5 +92,36 @@ export const getAppointmentsByUserController = async (
 
       return next(new ApiError("Error interno del servidor", 500));
     }
+  }
+};
+
+
+export const getAppointmentDetailsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+
+    const appointmentId = parseInt(req.params['id']);
+
+    if (isNaN(appointmentId)) {
+      throw new ApiError("ID de cita no válido", 400);
+    }
+    const appointment = await getAppointmentDetails(appointmentId);
+
+    if (!appointment) {
+      throw new ApiError("La cita no existe", 404);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Detalles de la cita obtenidos exitosamente",
+      data: appointment,
+    });
+  } catch (error: any) {
+    console.error("Error al obtener los detalles de la cita:", error);
+
+    return next(error instanceof ApiError ? error : new ApiError("Error interno del servidor", 500));
   }
 };

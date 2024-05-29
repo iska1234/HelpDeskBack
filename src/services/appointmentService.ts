@@ -1,4 +1,8 @@
-import { getAppointmentsByUserId, insertAppointment } from "../data/appointments-data";
+import {
+  getAppointmentDetails,
+  getAppointmentsByUserId,
+  insertAppointment,
+} from "../data/appointments-data";
 import { Appointment, AppointmentData } from "../models/appointments";
 
 export async function insertAppointmentService(
@@ -9,7 +13,16 @@ export async function insertAppointmentService(
   return insertedAppointment;
 }
 
-export async function getAppointmentsByUserService(userId: number): Promise<Appointment[]> {
+export async function getAppointmentsByUserService(
+  userId: number
+): Promise<Appointment[]> {
   const appointments = await getAppointmentsByUserId(userId);
   return appointments;
+}
+
+export async function getAppointmentDetailsService(
+  appointmentId: number
+): Promise<Appointment | null> {
+  const appointmentDetails = await getAppointmentDetails(appointmentId);
+  return appointmentDetails;
 }

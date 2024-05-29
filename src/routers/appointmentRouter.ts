@@ -1,12 +1,11 @@
 import express from 'express';
-import { authenticateHandler } from '../middlewares/authenticate';
-import { authorize } from '../middlewares/authorize';
-import { getAppointmentsByUserController, insertAppointmentController } from '../controller/appointmentController';
+
+import { getAppointmentDetailsController, getAppointmentsByUserController, insertAppointmentController } from '../controller/appointmentController';
 
 const appointmentRouter = express.Router();
 
 
-appointmentRouter.post('/new', authenticateHandler, authorize("admin", "user"), insertAppointmentController);
-appointmentRouter.get('/all/:userId', authenticateHandler, authorize("admin", "user"), getAppointmentsByUserController);
-
+appointmentRouter.post('/new',  insertAppointmentController);
+appointmentRouter.get('/all/:userId', getAppointmentsByUserController);
+appointmentRouter.get('/details/:id', getAppointmentDetailsController);
 export default appointmentRouter;

@@ -19,7 +19,7 @@ export async function insertAppointment(
 
 export async function getAppointmentsByUserId(userId: number): Promise<Appointment[]> {
   const { rows } = await query(
-    "SELECT * FROM appointments WHERE user_id = $1",
+    "SELECT a.*, u.name AS user_name FROM appointments a JOIN users u ON a.user_id = u.id WHERE a.user_id = $1 ORDER BY a.date ASC; ",
     [userId]
   );
 
